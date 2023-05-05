@@ -20,23 +20,23 @@ TreeNode::TreeNode()
 class BinTree
 {
 public:
-	void preorderTravel();          //µİ¹éµÄÇ°Ğò±éÀú
-	void InorderTravel();           //µİ¹éµÄÖĞĞò±éÀú
-	void PostorderTravel();         //µİ¹éµÄºóĞò±éÀú
-	void Levelorder();              //Ò»°ãµÄ²ã´Î±éÀú
+	void preorderTravel();          //é€’å½’çš„å‰åºéå†
+	void InorderTravel();           //é€’å½’çš„ä¸­åºéå†
+	void PostorderTravel();         //é€’å½’çš„ååºéå†
+	void Levelorder();              //ä¸€èˆ¬çš„å±‚æ¬¡éå†
 	bool Isempty();
-	void CreateTree_base();                      //»ù±¾´´½¨Ê÷µÄ·½·¨
-	void CreateTree_pre_with_Inorder(string pre,string inorder);          //ÌØ±ğ´´½¨Ê÷µÄ·½·¨
-	void CreateTree_Post_with_Inorder(string Inorder_Str,string Post_Str);         //ÌØ±ğ´´½¨Ê÷µÄ·½·¨
+	void CreateTree_base();                      //åŸºæœ¬åˆ›å»ºæ ‘çš„æ–¹æ³•
+	void CreateTree_pre_with_Inorder(string pre,string inorder);          //ç‰¹åˆ«åˆ›å»ºæ ‘çš„æ–¹æ³•
+	void CreateTree_Post_with_Inorder(string Inorder_Str,string Post_Str);         //ç‰¹åˆ«åˆ›å»ºæ ‘çš„æ–¹æ³•
 	TreeNode* get_root();
-	BinTree();                                   //³õÊ¼»¯
-	~BinTree();                                  //Îö¹¹
+	BinTree();                                   //åˆå§‹åŒ–
+	~BinTree();                                  //ææ„
 
 private:
 	TreeNode* root;
-	void auxiliary_function_pre(TreeNode* Node);      //¸¨Öúº¯Êı£º¸¨ÖúÓÚÇ°Ğò±éÀú
-	void auxiliary_function_Inorder(TreeNode* Node);  //¸¨Öúº¯Êı£º¸¨ÖúÓÚÖĞĞò±éÀú
-	void auxiliary_function_Post(TreeNode* Node);     //¸¨Öúº¯Êı£º¸¨ÖúÓÚºóĞò±éÀú
+	void auxiliary_function_pre(TreeNode* Node);      //è¾…åŠ©å‡½æ•°ï¼šè¾…åŠ©äºå‰åºéå†
+	void auxiliary_function_Inorder(TreeNode* Node);  //è¾…åŠ©å‡½æ•°ï¼šè¾…åŠ©äºä¸­åºéå†
+	void auxiliary_function_Post(TreeNode* Node);     //è¾…åŠ©å‡½æ•°ï¼šè¾…åŠ©äºååºéå†
 	TreeNode* auxiliary_function_SP1(string pre, string Inorder, int& cur);
 	TreeNode* auxiliary_function_SP2(string Inorder, string Post, int& cur);
 	int Find(string Str, char target);
@@ -87,7 +87,19 @@ BinTree::BinTree()
 }
 BinTree::~BinTree()
 {
-
+        queue<TreeNode*>*Q = new queue<TreeNode*>();
+	Q->push(this->root);
+	TreeNode* cur = nullptr;
+	while (!(Q->empty()))
+	{
+		cur = Q->front();
+		Q->pop();
+		if (cur->Left != NULL) Q->push(cur->Left);
+		if (cur->Right != NULL)   Q->push(cur->Right);
+		delete cur;
+	}
+	this->root = NULL;
+	delete Q;
 }
 void BinTree::auxiliary_function_pre(TreeNode* Node)
 {
@@ -176,7 +188,7 @@ int Tree_Length(BinTree Tree)
 }
 void preorderTravel(BinTree* Tree)
 {
-	//·Çµİ¹éµÄÇ°Ğò±éÀú
+	//éé€’å½’çš„å‰åºéå†
 	stack<TreeNode*>* s = new stack<TreeNode*>();
 	TreeNode* current = Tree->get_root();
 	s->push(current);
@@ -197,7 +209,7 @@ void preorderTravel(BinTree* Tree)
 }
 void InorderTravel(BinTree* Tree)
 {
-	//·Çµİ¹éµÄÖĞĞò±éÀú
+	//éé€’å½’çš„ä¸­åºéå†
 	stack<TreeNode*>* s = new stack<TreeNode*>();
 	TreeNode* current = Tree->get_root();
 	s->push(current);
@@ -223,7 +235,7 @@ void InorderTravel(BinTree* Tree)
 }
 void PostorderTravel(BinTree* Tree)
 {
-	//·Çµİ¹éµÄºóĞò±éÀú
+	//éé€’å½’çš„ååºéå†
 	stack<TreeNode*>* s = new stack<TreeNode*>();
 	stack<TreeNode*>* ans = new stack<TreeNode*>();
 	TreeNode* current = Tree->get_root();
@@ -254,7 +266,7 @@ void PostorderTravel(BinTree* Tree)
 }
 void Level_order(BinTree* Tree)
 {
-	//Ò»°ãµÄ²ã´Î±éÀú
+	//ä¸€èˆ¬çš„å±‚æ¬¡éå†
 	queue<TreeNode*>* Q = new queue<TreeNode*>();
 	TreeNode* current = Tree->get_root();
 	Q->push(current);
@@ -298,17 +310,4 @@ void BinTree::Levelorder()
 bool BinTree::Isempty()
 {
 	return this->root == NULL;
-}
-int main()
-{
-	BinTree* bt1 = new BinTree;
-	BinTree* bt2 = new BinTree;
-	string Pre_Str = "ABDFECGHI";
-	string Inorder_Str = "DBEFAGHCI";
-	string Post_Str = "DEFBHGICA";
-	bt1->CreateTree_pre_with_Inorder(Pre_Str, Inorder_Str);
-	bt1->preorderTravel();
-	bt2->CreateTree_Post_with_Inorder(Inorder_Str, Post_Str);
-	cout << endl;
-	bt2->preorderTravel();
 }
