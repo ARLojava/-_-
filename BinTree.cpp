@@ -311,3 +311,38 @@ bool BinTree::Isempty()
 {
 	return this->root == NULL;
 }
+int Length(TreeNode* root)
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	else
+	{
+		int left_dep=Length(root->Left);
+		int right_dep = Length(root->Right);
+		return max(left_dep, right_dep) + 1;
+	}
+}
+void SP3(TreeNode* root)
+{
+	if (root !=NULL)
+	{
+		if (root->Left==NULL && root->Right==NULL)
+		{
+			cout << root->Value << " ";
+		}
+		SP3(root->Left);
+		SP3(root->Right);
+	}
+}
+void SP4(TreeNode* root)
+{
+	if (root != NULL)
+	{
+		SP4(root->Left);
+		cout << root->Value << " ";
+		SP4(root->Right);
+	}
+	return;
+}
